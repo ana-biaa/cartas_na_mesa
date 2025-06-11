@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cartas na mesa</title>
+        <style>
+            .cabecalho { /*estilo do cabeçalho*/
+                background: linear-gradient(135deg, #1a5f1a 0%, #0d3b0d 100%);
+                color: white;
+                padding: 5px 0;
+                font-family: 'Georgia', serif;
+                text-align: center;
+                position: relative;
+                overflow: visible;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            .cabecalho::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♠</text><text x="30" y="60" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♥</text><text x="70" y="40" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♦</text><text x="50" y="80" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♣</text></svg>');
+                z-index: 0;
+            }
+            .navbar {
+                display: flex;
+                justify-content: space-between; /*links à esquerda e logo à direita*/
+                align-items: center;
+                background-color: linear-gradient(135deg, #1a5f1a 0%, #0d3b0d 100%);
+                padding: 0 20px;
+                height: auto;
+                min-height: 70px;
+                font-size: 20px;
+                position: relative;
+                z-index: 1;
+            }
+            .nav-esquerda {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+            .nav-direita {
+                display: flex;
+                align-items: center;
+                gap: 50px; /*espaçamento entre os links*/
+            }
+            .navbar a {
+                color: white;
+                text-decoration: none;
+                padding: 8px 12px;
+                position: relative;
+                display: flex;
+                align-items: center; /* alinha verticalmente os textos */
+                height: 100%;
+            }
+            .navbar a:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                border-radius: 6px;
+            }
+            .dropdown {
+                position: relative;
+                display: inline-block;
+                align-items: center;
+            }
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #0d3b0d;
+                min-width: 200px;
+                z-index: 1000;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                border-radius: 6px;
+                max-height: 300px; /* define uma altura máxima */
+                overflow-y: auto;  /* adiciona rolagem se ultrapassar */
+                top: 100%;
+                left: 0;
+                white-space: nowrap;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .dropdown-content a {
+                display: block;
+                padding: 12px 16px;
+                text-align: none;
+            }
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+            /*Logo*/
+            .logo-navbar {
+                max-height: 150px;
+                height: auto;
+                width: auto;
+                margin-top: 0;
+            }
+            body { /*corpo da página*/
+                background-color: rgb(43, 88, 43);
+                color: #333; /* Texto escuro para contraste */
+                margin: 0;
+                font-family: 'Courier New', monospace;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♠</text><text x="30" y="60" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♥</text><text x="70" y="40" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♦</text><text x="50" y="80" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♣</text></svg>');
+            }
+            .titulo-container { /*container do título*/
+                position: absolute; 
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%); 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin: 0 auto;
+            }
+            h1 { /*estilo do título*/
+                font-size: 40px;
+                margin: 5 20px;
+            }
+            .baralho-icon { /*baralho do título*/
+                width: 170px;
+                height: auto;
+                flex-shrink: 0;
+                margin-top: 5px;
+            }
+            /* Container para os jogos (2 colunas) */
+            .jogos-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+                margin-top: 20px;
+            }
+            .jogo { /* Cada bloco de jogo (imagem + título) */
+                width: 45%; /* Ajuste conforme necessário */
+                max-width: 500px;
+                text-align: center;
+            }
+            .jogo h3 { /*título dos jogos*/
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            .jogo img { /*imagens dos jogos*/
+                width: 100%;
+                max-width: 400px;
+                border-radius: 10px; /*borda arredondada*/
+                transition: transform 0.3s;
+                cursor: pointer; /*cursor de clique*/
+            }
+            .jogo img:hover { /* Efeito de zoom ao passar o mouse */
+                transform: scale(1.03);
+            }
+            a { /*remove o sublinhado dos links*/
+                text-decoration: none;
+                color: white;
+            }
+            /* Espaçamento entre seções */
+            .espaco {
+                height: 30px;
+            }
+            .filter-option {
+                padding: 12px 16px;
+                color: white;
+                display: block;
+                cursor: pointer;
+            }
+            
+            .filter-option:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .filter-label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            
+            .filter-select {
+                width: 100%;
+                padding: 5px;
+                border-radius: 4px;
+                border: none;
+                background-color: #1a5f1a;
+                color: white;
+            }
+        </style>
+    </head>
+    <body> 
+        <!--cabeçalho-->
+         <header class="cabecalho">
+            <!-- Navbar com links -->
+             <nav class="navbar">
+    <div class="nav-esquerda">
+            <img src="imagens/logo.png" alt="Logo" class="logo-navbar">
+        </a>
+    </div>
+    <!-- Título e imagens -->
+        <div class="titulo-container"> 
+            <img src="imagens/baralho1.png" class="baralho-icon">
+            <h1>Cartas na mesa</h1>
+            <img src="imagens/baralho1.png" class="baralho-icon">
+        </div>
+    <div class="nav-direita">
+        
+        <div class="dropdown">
+        <a href="#">Filtro</a>
+        <div class="dropdown-content">
+            <div class="filter-option">
+                <label class="filter-label">Quantidade de pessoas:</label>
+                    <select class="filter-select">
+                        <option value="any">Sem restrição</option>
+                        <option value="2">2 jogador</option>
+                        <option value="3">3 jogadores</option>
+                        <option value="4">4 jogadores</option>
+                        <option value="5+">mais de 5 jogadores</option>
+                    </select>
+                </div>
+                <div class="filter-option">
+                    <label class="filter-label">Baralhos mínimos:</label>
+                    <select class="filter-select">
+                        <option value="any">Sem restrição</option>
+                        <option value="1">1 baralho</option>
+                        <option value="2">2 baralhos</option>
+                        <option value="3+">3+ baralhos</option>
+                    </select>
+                </div>
+                <div class="filter-option">
+                    <label class="filter-label">Grau de dificuldade:</label>
+                    <select class="filter-select">
+                        <option value="any">Sem restrição</option>
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Médio</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                </div>
+                <div class="filter-option" style="text-align: center;">
+                    <button style="padding: 5px 15px; background-color: #1a5f1a; color: white; border: 1px solid white; border-radius: 4px; cursor: pointer;">Aplicar</button>
+                </div>
+            </div>
+            </div>
+        <div class="dropdown">                    
+            <a href="#">Jogos</a>
+            <div class="dropdown-content">
+                <a href="pife.html">Pife</a>
+                <a href="burro.html">Burro</a>
+                <a href="truco.html">Truco Mineiro</a>
+                <a href="mexe-mexe.html">Mexe Mexe</a>
+                <a href="mau-mau.html">Mau Mau</a>
+                <a href="blackjack.html">Blackjack</a>
+                <a href="copod'agua.html">Copo d'água</a>
+                <a href="poker.html">Poker</a>
+            </div>
+        </div>
+        <a href="curiosidades.html">Curiosidades</a>
+        </div>
+    </div>
+    
+</nav>
+        </header>
+        <!-- Container principal para os jogos (2 colunas) -->
+        <div class="jogos-container">
+            <!-- Pife -->
+            <div class="jogo">
+                <a href="pife.html"> <!--define o destino do link-->
+                    <h3>Pife</h3>
+                    <img src="imagens/pife.jpg">
+                </a> <!--fecha o link-->
+            </div> <!--fecha o container-->
+            <!-- Burro -->
+            <div class="jogo">
+                <a href="burro.html">
+                    <h3>Burro</h3>
+                    <img src="imagens/burro.jpg">
+                </a>
+            </div>
+            <!-- Truco Mineiro -->
+            <div class="jogo">
+                <a href="truco.html">
+                    <h3>Truco Mineiro</h3>
+                    <img src="imagens/truco.webp">
+                </a>
+            </div>
+            <!-- Mexe Mexe -->
+            <div class="jogo">
+                <a href="mexe-mexe.html">
+                    <h3>Mexe Mexe</h3>
+                    <img src="imagens/mexe mexe.jpg">
+                </a>
+            </div>
+            <!-- Mau mau -->
+            <div class="jogo">
+                <a href="mau-mau.html">
+                    <h3>Mau Mau</h3>
+                    <img src="imagens/mau mau.jpg">
+                </a>
+            </div>
+            <!-- Black Jack -->
+            <div class="jogo">
+                <a href="blackjack.html">
+                    <h3>Blackjack</h3>
+                    <img src="imagens/black jack.webp">
+                </a>
+            </div>
+            <!--Copo d'água-->
+            <div class="jogo">
+                <a href="copod'agua.html">
+                    <h3>Copo d'água</h3>
+                    <img src="imagens/copod'agua.png">
+                </a>
+            </div>
+            <!-- Poker(Texas Hold'em) -->
+            <div class="jogo">
+                <a href="poker.html">
+                    <h3>Poker (Texas Hold'em)</h3>
+                    <img src="imagens/poker.webp">
+                </a>
+            </div>
+        </div>
+<script> 
+    const jogos = [
+        {
+            nome: "Pife",
+            jogadores: ["2", "3", "4", "5+"],
+            baralhos: ["1"],
+            dificuldade: ["easy"],
+            elemento: document.querySelector('.jogo:nth-of-type(1)')
+        },
+        {
+            nome: "Burro",
+            jogadores: ["2", "3", "4", "5+"],
+            baralhos: ["1"],
+            dificuldade: ["easy"],
+            elemento: document.querySelector('.jogo:nth-of-type(2)')
+        },
+        {
+            nome: "Truco Mineiro",
+            jogadores: ["4"],
+            baralhos: ["1"],
+            dificuldade: ["hard"],
+            elemento: document.querySelector('.jogo:nth-of-type(3)')
+        },
+        {
+            nome: "Mexe Mexe",
+            jogadores: ["2", "3", "4", "5+"],
+            baralhos: ["2", "3+"],
+            dificuldade: ["medium"],
+            elemento: document.querySelector('.jogo:nth-of-type(4)')
+        },
+        {
+            nome: "Mau Mau",
+            jogadores: ["2", "3", "4", "5+"],
+            baralhos: ["1"],
+            dificuldade: ["hard"],
+            elemento: document.querySelector('.jogo:nth-of-type(5)')
+        },
+        {
+            nome: "Blackjack",
+            jogadores: ["2", "3", "4", "5+"],
+            baralhos: ["1", "2","3+"],
+            dificuldade: ["medium"],
+            elemento: document.querySelector('.jogo:nth-of-type(6)')
+        },
+        {
+            nome: "Copo d'água",
+            jogadores: ["3", "4", "5+"],
+            baralhos: ["1"],
+            dificuldade: "medium",
+            elemento: document.querySelector('.jogo:nth-of-type(7)')
+        },
+        {
+            nome: "Poker",
+            jogadores: ["3", "4", "5+"],
+            baralhos: ["1"],
+            dificuldade: ["hard"],
+            elemento: document.querySelector('.jogo:nth-of-type(8)')
+        },
+    ];
+
+    const selects = document.querySelectorAll('.filter-select'); 
+    const botaoAplicar = document.querySelector('.filter-option button'); 
+
+    botaoAplicar.addEventListener('click', () => { 
+        const [jogadorSel, baralhoSel, dificuldadeSel] = [...selects].map(s => s.value); 
+
+        jogos.forEach(jogo => {
+            const matchJogador = jogadorSel === 'any' || [].concat(jogo.jogadores).includes(jogadorSel);
+            const matchBaralho = baralhoSel === 'any' || [].concat(jogo.baralhos).includes(baralhoSel);
+            const matchDificuldade = dificuldadeSel === 'any' || [].concat(jogo.dificuldade).includes(dificuldadeSel);
+
+
+            if (matchJogador && matchBaralho && matchDificuldade) {
+                jogo.elemento.style.display = "block";
+            } else {
+                jogo.elemento.style.display = "none";
+            }
+        });
+    });
+</script> 
+    </body>
+</html>

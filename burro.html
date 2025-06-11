@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Burro</title>
+    <style>
+        body { /*corpo da página*/
+                background-color: rgb(43, 88, 43);
+                color: #fffdfd; /* Texto escuro para contraste */
+                margin: 0;
+                font-family: 'Georgia', serif;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♠</text><text x="30" y="60" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♥</text><text x="70" y="40" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♦</text><text x="50" y="80" font-family="Arial" font-size="20" fill="rgba(255,255,255,0.05)">♣</text></svg>');
+            }
+        .titulo-container { /*container do título*/
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                margin: 0 auto;
+        }
+        h1 { /*estilo do título*/
+                font-size: 50px;
+                display: inline-block;
+                margin: 0 20px;
+                color: #fffdfd;
+            }
+        .baralho-icon { /*baralho do título*/
+                width: 170px;
+                height: auto;
+                flex-shrink: 0;
+        }
+        .conteudo-jogo {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .conteudo-jogo img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .conteudo-jogo p {
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <!--cabeçalho-->
+         <header class="cabecalho">
+    <!-- CABEÇALHO (igual à página principal) -->
+    <div class="titulo-container">
+        <a href="A3.html"> 
+        <img src="imagens/baralho1.png" class="baralho-icon">
+        </a> 
+        <a href="A3.html"> 
+        <h1>Cartas na mesa</h1>
+        </a>
+        <a href="A3.html">
+        <img src="imagens/baralho1.png" class="baralho-icon">
+        </a>
+    </div>
+    <div class="conteudo-jogo">
+        <h2>Burro</h2>
+        <img src="imagens/burro.jpg">
+        <!--Regras-->
+        <h3>Regras do Burro:</h3>
+        <p>- Participantes: 2 a 8 pessoas<br>
+            - Baralho: 1 baralho tradicional, sem os coringas<br>
+            - Distribuição: 5 cartas para cada participante<br>
+            - Objetivo: descartar todas as cartas</p>
+        <!--Dinâmica-->
+        <h3>Dinâmica do jogo:</h3>
+        <p>- Cada jogador receberá 5 cartas <br>
+            - Uma carta do monte é colocada no centro da mesa <br>
+            - O primeiro jogador deverá descartar uma carta do 
+            mesmo naipe ou do mesmo número/letra da carta que está
+            na mesa <br>
+            - Em sentido horário, o próximo jogador fará a mesma
+            coisa, caso algum jogador não tenha nenhuma carta 
+            para jogar ele deverá comprar uma do monte e não jogar
+            na rodada em questão <br>
+            - O vencedor da rodada é aquele que jogar a maior carta,
+            sendo em ordem crescente (As, 2, 3 ... dama, rei) <br>
+            - Caso algum jogador jogue uma carta do mesmo número/letra 
+            o próximo jogador deverá seguir o naipe da última carta <br>
+            - Caso as maiores cartas sejam iguais o vencedor da rodada
+            será quem jogou primeiro <br>
+            - A rodada seguinte começa com o vencedor da anterior,
+            com a carta que ele escolher e assim por diante <br>
+            - E o jogo acaba quando um jogador descartar todas as suas cartas
+        </p>
+    </div>
+</body>
+</html>
